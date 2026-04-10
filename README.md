@@ -4,18 +4,22 @@
 
 ---
 
-## 🚀 วิธีการใช้งาน (Boot Script)
-ก๊อปปี้โค้ดนี้ไปวางใน Executor ของคุณเพื่อเริ่มต้น:
-
+### 💻 วิธีการรัน
 ```lua
-local Rayfield = loadstring(game:HttpGet("[https://raw.githubusercontent.com/TURK2/TURK-HUB-Library/main/Library.lua](https://raw.githubusercontent.com/TURK2/TURK-HUB-Library/main/Library.lua)"))()
+local Library = loadstring(game:HttpGet("ลิงก์_Library_ของพี่_ตรงนี้"))()
 
-local Window = Rayfield:CreateWindow({
+local Window = Library:CreateWindow({
     Name = "TURK HUB",
-    KeySystem = true, -- ตั้งเป็น false เพื่อปิดระบบใส่ Key
-    Key = "TURK-6699" 
+    KeySystem = true,
+    Key = "TURK-6699"
 })
 
+-- ตัวอย่างการแจ้งเตือน
+Library:Notify({
+    Title = "Welcome!",
+    Content = "สคริปต์กำลังเริ่มทำงาน...",
+    Duration = 5
+})
 ```
 ## 🛠️ เอกสารการใช้งาน (Documentation)
 ### 📂 การสร้าง Tab & Section
