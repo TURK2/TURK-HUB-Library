@@ -3,7 +3,7 @@
 ## 🚀 วิธีการเรียกใช้งาน (Boot Script)
 ก๊อปปี้โค้ดด้านล่างนี้ไปวางใน Executor ของคุณเพื่อเริ่มต้นใช้งาน:
 ```lua
-local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOUR_USER/YOUR_REPO/main/Library.lua"))()
+local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/TURK2/TURK-HUB-Library/refs/heads/main/Library.lua"))()
 
 local Window = Rayfield:CreateWindow({
     Name = "TURK HUB",
