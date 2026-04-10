@@ -6,12 +6,12 @@
 
 ### 💻 วิธีการรัน
 ```lua
-local Library = loadstring(game:HttpGet("ลิงก์_Library_ของพี่_ตรงนี้"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/TURK2/TURK-HUB-Library/refs/heads/main/Library.lua"))()
 
 local Window = Library:CreateWindow({
     Name = "TURK HUB",
     KeySystem = true,
-    Key = "TURK-6699"
+    Key = "test"
 })
 
 -- ตัวอย่างการแจ้งเตือน
