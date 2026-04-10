@@ -1,62 +1,54 @@
+```markdown
 # 🌌 TURK HUB | ULTIMATE EDITION
-**The Most Advanced & Adaptive UI Library for Roblox Scripting.**
-## 🚀 วิธีการเรียกใช้งาน (Boot Script)
-ก๊อปปี้โค้ดด้านล่างนี้ไปวางใน Executor ของคุณเพื่อเริ่มต้นใช้งาน:
+**Advanced, Adaptive, and Aesthetic UI Library for Roblox Scripting.**
+
+---
+
+## 🚀 วิธีการใช้งาน (Boot Script)
+ก๊อปปี้โค้ดนี้ไปวางใน Executor ของคุณเพื่อเริ่มต้น:
+
 ```lua
-local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/TURK2/TURK-HUB-Library/refs/heads/main/Library.lua"))()
+local Rayfield = loadstring(game:HttpGet("[https://raw.githubusercontent.com/TURK2/TURK-HUB-Library/main/Library.lua](https://raw.githubusercontent.com/TURK2/TURK-HUB-Library/main/Library.lua)"))()
 
 local Window = Rayfield:CreateWindow({
     Name = "TURK HUB",
-    Key = "TURK-6699" -- ตั้งรหัสผ่านที่นี่
-})
-
--- [[ การแจ้งเตือนเมื่อโหลดสำเร็จ ]]
-Rayfield:Notify({
-    Title = "Script Loaded",
-    Content = "Welcome to TURK HUB Ultimate Edition",
-    Duration = 5
+    KeySystem = true, -- ตั้งเป็น false เพื่อปิดระบบใส่ Key
+    Key = "TURK-6699" 
 })
 
 ```
 ## 🛠️ เอกสารการใช้งาน (Documentation)
-### 📂 การสร้าง Tab (Tabs)
-ใช้สำหรับแยกหมวดหมู่ของฟีเจอร์ต่างๆ
+### 📂 การสร้าง Tab & Section
 ```lua
 local MainTab = Window:CreateTab("Main Cheats")
-local MiscTab = Window:CreateTab("Settings")
+MainTab:CreateSection("Movement Settings")
 
 ```
-### 📋 การสร้าง Section (Sections)
-ใช้จัดระเบียบองค์ประกอบภายใน Tab
-```lua
-MainTab:CreateSection("Combat Settings")
-
-```
-### 🔘 ปุ่มกด (Buttons)
+### 🔘 ปุ่มกด (Button)
 ```lua
 MainTab:CreateButton({
-    Name = "Kill All Players",
+    Name = "Click Me!",
     Callback = function()
-        print("Executing Kill All...")
+        print("Clicked!")
     end
 })
 
 ```
-### Toggle (เปิด/ปิด)
+### 🔘 เปิด/ปิด (Toggle)
 ```lua
 MainTab:CreateToggle({
     Name = "Auto Farm",
     CurrentValue = false,
     Callback = function(Value)
-        print("Auto Farm status:", Value)
+        print("Status:", Value)
     end
 })
 
 ```
-### 📏 แถบเลื่อน (Sliders)
+### 📏 แถบเลื่อน (Slider)
 ```lua
 MainTab:CreateSlider({
-    Name = "WalkSpeed Hack",
+    Name = "WalkSpeed",
     Range = {16, 500},
     CurrentValue = 16,
     Callback = function(Value)
@@ -65,30 +57,33 @@ MainTab:CreateSlider({
 })
 
 ```
-### 🔽 ตัวเลือกรายการ (Dropdowns)
+### 🔽 ตัวเลือก (Dropdown)
 ```lua
 MainTab:CreateDropdown({
-    Name = "Select Target",
-    Options = {"Head", "Torso", "Random"},
+    Name = "Select Weapon",
+    Options = {"Sword", "Gun", "Magic"},
     Callback = function(Option)
-        print("Selected Target:", Option)
+        print("Selected:", Option)
     end
 })
 
 ```
-### ✍️ ช่องกรอกข้อมูล (Inputs)
+### 📢 การแจ้งเตือน (Notification)
 ```lua
-MiscTab:CreateInput({
-    Name = "Custom FOV",
-    PlaceholderText = "Enter FOV (Default 70)",
-    Callback = function(Text)
-        workspace.CurrentCamera.FieldOfView = tonumber(Text) or 70
-    end
+Rayfield:Notify({
+    Title = "Welcome",
+    Content = "TURK HUB Loaded Successfully!",
+    Duration = 5
 })
 
 ```
-## ✨ จุดเด่นของ Library นี้
- * **Rayfield-Style API:** เปลี่ยนมาใช้การเรียกแบบ Rayfield:CreateWindow ทำให้คนย้ายค่ายมาใช้ของพี่ได้ทันทีโดยไม่ต้องแก้โค้ดเยอะ
- * **Adaptive Interface:** หน้าต่างสวยงาม พอดีทุกหน้าจอ ไม่ว่าจะเป็นมือถือหรือคอมพิวเตอร์
- * **No Version Tags:** ลบเลขเวอร์ชันออกเพื่อความสะอาดตาและดูเป็นสคริปต์ระดับพรีเมียม
- * **Security Integrated:** ระบบ Key System ฝังมาให้ในตัว ปลอดภัยแน่นอน
+## ✨ จุดเด่น (Features)
+ * 📱 **Adaptive UI:** ขนาดพอดีทั้งมือถือและคอมพิวเตอร์
+ * 🔑 **Toggleable Key System:** เลือกเปิดหรือปิดหน้าใส่คีย์ได้ง่ายๆ
+ * 🎨 **Modern Design:** สไตล์โปร่งแสงพร้อม Neon Glow
+ * ⚡ **Ultra Smooth:** อนิเมชันนุ่มนวล ไม่กินสเปคเครื่อง
+```
+
+พี่ก๊อปไปใส่ได้เลยครับ! ระบบเปิด-ปิด Key ใช้งานง่ายมาก แค่แก้ `KeySystem = true` หรือ `false` ในตัวสคริปต์ตอนเรียกใช้ครับ! มีอะไรเพิ่มบอกได้เลยพี่!
+
+```
