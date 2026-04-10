@@ -70,69 +70,44 @@ function Library:CreateWindow(Config)
     -- [ ⏳ ALL-IN-ONE LOADER & KEY ]
     local function StartEngine()
         local LFrame = Instance.new("Frame", Gui); LFrame.Size = UDim2.new(0, 260, 0, 150); LFrame.Position = UDim2.new(0.5, 0, 0.5, 0); LFrame.AnchorPoint = Vector2.new(0.5, 0.5); LFrame.BackgroundColor3 = Theme.Main; Instance.new("UICorner", LFrame); local LS = Instance.new("UIStroke", LFrame); LS.Color = Theme.Accent; LS.Thickness = 2
-        local LTit = Instance.new("TextLabel", LFrame); LTit.Size = UDim2.new(1, 0, 0, 45); LTit.Text = "TURK HUB V11"; LTit.TextColor3 = Theme.Accent; LTit.Font = "GothamBlack"; LTit.TextSize = 16; LTit.BackgroundTransparency = 1
+        local LTit = Instance.new("TextLabel", LFrame); LTit.Size = UDim2.new(1, 0, 0, 45); LTit.Text = Config.Name; LTit.TextColor3 = Theme.Accent; LTit.Font = "GothamBlack"; LTit.TextSize = 16; LTit.BackgroundTransparency = 1
         
-        local KInp = Instance.new("TextBox", LFrame); KInp.Size = UDim2.new(0.85, 0, 0, 32); KInp.Position = UDim2.new(0.075, 0, 0.35, 0); KInp.PlaceholderText = "Enter License Key..."; KInp.Text = ""; KInp.BackgroundColor3 = Theme.Secondary; KInp.TextColor3 = Theme.Text; KInp.Font = "GothamBold"; KInp.TextSize = 11; KInp.Visible = false; Instance.new("UICorner", KInp)
-        local KBtn = Instance.new("TextButton", LFrame); KBtn.Size = UDim2.new(0.85, 0, 0, 32); KBtn.Position = UDim2.new(0.075, 0, 0.62, 0); KBtn.Text = "LOGIN"; KBtn.BackgroundColor3 = Theme.Accent; KBtn.TextColor3 = Theme.Main; KBtn.Font = "GothamBlack"; KBtn.TextSize = 12; KBtn.Visible = false; Instance.new("UICorner", KBtn)
-        local GBtn = Instance.new("TextButton", LFrame); GBtn.Size = UDim2.new(1, 0, 0, 20); GBtn.Position = UDim2.new(0, 0, 0.85, 0); GBtn.Text = "Get Key Link"; GBtn.BackgroundTransparency = 1; GBtn.TextColor3 = Color3.fromRGB(130, 130, 130); GBtn.Font = "GothamBold"; GBtn.TextSize = 10; GBtn.Visible = false
-
         local LBarBG = Instance.new("Frame", LFrame); LBarBG.Size = UDim2.new(0.8, 0, 0, 3); LBarBG.Position = UDim2.new(0.1, 0, 0.6, 0); LBarBG.BackgroundColor3 = Theme.Secondary; Instance.new("UICorner", LBarBG)
         local LBar = Instance.new("Frame", LBarBG); LBar.Size = UDim2.new(0, 0, 1, 0); LBar.BackgroundColor3 = Theme.Accent; Instance.new("UICorner", LBar)
 
         -- แอนิเมชันตอนโหลด
-        for i = 1, 100 do LBar.Size = UDim2.new(i/100, 0, 1, 0) task.wait(0.008) end
-        LBarBG.Visible = false
-        KInp.Visible = true; KBtn.Visible = true; GBtn.Visible = true
-        LTit.Text = "AUTHENTICATION"
+        for i = 1, 100 do LBar.Size = UDim2.new(i/100, 0, 1, 0) task.wait(0.005) end
 
-        GBtn.MouseButton1Click:Connect(function() setclipboard(Config.KeySystem.Link) GBtn.Text = "LINK COPIED!" task.wait(1.5) GBtn.Text = "Get Key Link" end)
-        
-        KBtn.MouseButton1Click:Connect(function()
-            if KInp.Text == Config.KeySystem.Key then 
-                KBtn.Text = "SUCCESS!"; Tween(LFrame, {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}, 0.5)
-                task.wait(0.5); LFrame:Destroy(); Main.Visible = true; TogF.Visible = true; Tween(Main, {Size = UDim2.new(0, MainWidth, 0, MainHeight)}, 0.5)
-            else
-                LS.Color = Color3.new(1,0,0); task.spawn(function() for i=1,8 do LFrame.Position = UDim2.new(0.5, math.random(-2,2), 0.5, math.random(-2,2)); task.wait(0.01) end LFrame.Position = UDim2.new(0.5,0,0.5,0) end)
-                task.wait(1); LS.Color = Theme.Accent
-            end
-        end)
-    end
-    StartEngine()
+        -- เช็คว่าเปิดใช้งานระบบ Key หรือไม่
+        if Config.KeySystem then
+            LBarBG.Visible = false
+            LTit.Text = "AUTHENTICATION"
 
-    -- [ 🔳 MAIN UI COMPONENTS ]
-    local Top = Instance.new("Frame", Main); Top.Size = UDim2.new(1, 0, 0, 35); Top.BackgroundTransparency = 1; MakeDraggable(Top, Main)
-    local Title = Instance.new("TextLabel", Top); Title.Size = UDim2.new(1, -20, 1, 0); Title.Position = UDim2.new(0, 15, 0, 0); Title.Text = Config.Name; Title.TextColor3 = Theme.Text; Title.Font = "GothamBlack"; Title.TextSize = 11; Title.TextXAlignment = "Left"; Title.BackgroundTransparency = 1
-    
-    local Side = Instance.new("ScrollingFrame", Main); Side.Size = UDim2.new(0, SideWidth, 1, -50); Side.Position = UDim2.new(0, 10, 0, 42); Side.BackgroundTransparency = 1; Side.ScrollBarThickness = 0; Side.AutomaticCanvasSize = "Y"
-    Instance.new("UIListLayout", Side).Padding = UDim.new(0, 5)
-    local Container = Instance.new("Frame", Main); Container.Size = UDim2.new(1, -(SideWidth + 25), 1, -50); Container.Position = UDim2.new(0, SideWidth + 15, 0, 42); Container.BackgroundTransparency = 1
+            local KInp = Instance.new("TextBox", LFrame); KInp.Size = UDim2.new(0.85, 0, 0, 32); KInp.Position = UDim2.new(0.075, 0, 0.35, 0); KInp.PlaceholderText = "Enter License Key..."; KInp.Text = ""; KInp.BackgroundColor3 = Theme.Secondary; KInp.TextColor3 = Theme.Text; KInp.Font = "GothamBold"; KInp.TextSize = 11; Instance.new("UICorner", KInp)
+            local KBtn = Instance.new("TextButton", LFrame); KBtn.Size = UDim2.new(0.85, 0, 0, 32); KBtn.Position = UDim2.new(0.075, 0, 0.62, 0); KBtn.Text = "LOGIN"; KBtn.BackgroundColor3 = Theme.Accent; KBtn.TextColor3 = Theme.Main; KBtn.Font = "GothamBlack"; KBtn.TextSize = 12; Instance.new("UICorner", KBtn)
+            local GBtn = Instance.new("TextButton", LFrame); GBtn.Size = UDim2.new(1, 0, 0, 20); GBtn.Position = UDim2.new(0, 0, 0.85, 0); GBtn.Text = "Get Key Link"; GBtn.BackgroundTransparency = 1; GBtn.TextColor3 = Color3.fromRGB(130, 130, 130); GBtn.Font = "GothamBold"; GBtn.TextSize = 10
 
-    local Tabs = {First = true, Selected = nil}
-    function Tabs:CreateTab(name)
-        local TabBtn = Instance.new("TextButton", Side); TabBtn.Size = UDim2.new(1, -5, 0, 28); TabBtn.BackgroundColor3 = Theme.Secondary; TabBtn.Text = name; TabBtn.TextColor3 = Color3.fromRGB(140,140,140); TabBtn.Font = "GothamBold"; TabBtn.TextSize = 9; TabBtn.AutoButtonColor = false; Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 6); local TS_B = Instance.new("UIStroke", TabBtn); TS_B.Color = Theme.Accent; TS_B.Enabled = false
-        local Page = Instance.new("ScrollingFrame", Container); Page.Size = UDim2.new(1, 0, 1, 0); Page.Visible = false; Page.BackgroundTransparency = 1; Page.ScrollBarThickness = 0; Page.AutomaticCanvasSize = "Y"; Instance.new("UIListLayout", Page).Padding = UDim.new(0, 6)
+            GBtn.MouseButton1Click:Connect(function() 
+                if setclipboard then setclipboard(Config.KeyLink or "") end
+                GBtn.Text = "LINK COPIED!"; task.wait(1.5); GBtn.Text = "Get Key Link" 
+            end)
 
-        TabBtn.MouseButton1Click:Connect(function()
-            if Tabs.Selected == TabBtn then return end
-            for _, v in pairs(Container:GetChildren()) do if v:IsA("ScrollingFrame") then v.Visible = false end end
-            for _, v in pairs(Side:GetChildren()) do if v:IsA("TextButton") then Tween(v, {BackgroundColor3 = Theme.Secondary, TextColor3 = Color3.fromRGB(140,140,140)}, 0.2); v.UIStroke.Enabled = false end end
-            Page.Visible = true; Tabs.Selected = TabBtn; Tween(TabBtn, {BackgroundColor3 = Theme.Accent, TextColor3 = Theme.Main}, 0.2); TS_B.Enabled = true
-        end)
-
-        if Tabs.First then Tabs.First = false; Tabs.Selected = TabBtn; Page.Visible = true; TabBtn.BackgroundColor3 = Theme.Accent; TabBtn.TextColor3 = Theme.Main; TS_B.Enabled = true end
-
-        local Elements = {}
-        function Elements:CreateButton(Info)
-            local b = Instance.new("TextButton", Page); b.Size = UDim2.new(0.98, 0, 0, 30); b.BackgroundColor3 = Theme.Element; b.Text = Info.Name; b.TextColor3 = Theme.Text; b.Font = "GothamBold"; b.TextSize = 10; Instance.new("UICorner", b).CornerRadius = UDim.new(0, 6); local BS = Instance.new("UIStroke", b); BS.Color = Theme.Stroke
-            b.MouseButton1Click:Connect(function() Info.Callback() end)
+            KBtn.MouseButton1Click:Connect(function()
+                if KInp.Text == Config.Key then 
+                    KBtn.Text = "SUCCESS!"; Tween(LFrame, {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}, 0.5)
+                    task.wait(0.5); LFrame:Destroy(); Main.Visible = true; TogF.Visible = true; Tween(Main, {Size = UDim2.new(0, MainWidth, 0, MainHeight)}, 0.5)
+                else
+                    LS.Color = Color3.new(1,0,0); task.spawn(function() for i=1,8 do LFrame.Position = UDim2.new(0.5, math.random(-2,2), 0.5, math.random(-2,2)); task.wait(0.01) end LFrame.Position = UDim2.new(0.5,0,0.5,0) end)
+                    task.wait(1); LS.Color = Theme.Accent
+                end
+            end)
+        else
+            -- ถ้า KeySystem = false ให้เข้าหน้าหลักทันที
+            LBar.Size = UDim2.new(1, 0, 1, 0)
+            task.wait(0.2)
+            Tween(LFrame, {Size = UDim2.new(0,0,0,0), BackgroundTransparency = 1}, 0.5)
+            task.wait(0.5); LFrame:Destroy(); Main.Visible = true; TogF.Visible = true; Tween(Main, {Size = UDim2.new(0, MainWidth, 0, MainHeight)}, 0.5)
         end
-        function Elements:CreateToggle(Info)
-            local s = Info.CurrentValue; local t = Instance.new("TextButton", Page); t.Size = UDim2.new(0.98, 0, 0, 32); t.BackgroundColor3 = Theme.Element; t.Text = "   "..Info.Name; t.TextColor3 = Theme.Text; t.Font = "GothamBold"; t.TextSize = 10; t.TextXAlignment = "Left"; Instance.new("UICorner", t).CornerRadius = UDim.new(0, 6)
-            local bg = Instance.new("Frame", t); bg.Size = UDim2.new(0, 28, 0, 14); bg.Position = UDim2.new(1, -35, 0.5, -7); bg.BackgroundColor3 = s and Theme.Accent or Theme.Secondary; Instance.new("UICorner", bg).CornerRadius = UDim.new(1, 0)
-            local dot = Instance.new("Frame", bg); dot.Size = UDim2.new(0, 10, 0, 10); dot.Position = s and UDim2.new(1, -12, 0.5, -5) or UDim2.new(0, 2, 0.5, -5); dot.BackgroundColor3 = Color3.new(1, 1, 1); Instance.new("UICorner", dot).CornerRadius = UDim.new(1, 0)
-            t.MouseButton1Click:Connect(function() s = not s; Tween(bg, {BackgroundColor3 = s and Theme.Accent or Theme.Secondary}, 0.2); Tween(dot, {Position = s and UDim2.new(1, -12, 0.5, -5) or UDim2.new(0, 2, 0.5, -5)}, 0.2); Info.Callback(s) end)
-        end
-        return Elements
     end
     return Tabs
 end
