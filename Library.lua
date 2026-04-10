@@ -65,7 +65,7 @@ function Library:CreateWindow(Config)
 
     -- [ 🔑 Key System ]
     local KeyEnabled = Config.KeySystem or false
-    local KeyMain = Instance.new("Frame", Gui); KeyMain.Size = UDim2.new(0, 320, 0, 190); KeyMain.Position = UDim2.new(0.5, 0, 0.5, 0); KeyMain.AnchorPoint = Vector2.new(0.5, 0.5); KeyMain.BackgroundColor3 = Theme.Main; KeyMain.Visible = KeyEnabled
+    local KeyMain = Instance.new("Frame", Gui); KeyMain.Size = UDim2.new(0, 320, 0, 190); KeyMain.Position = UDim2.new(0.5, 0, 0.5, 0); KeyMain.AnchorPoint = Vector2.new(0.5, 0.5); KeyMain.BackgroundColor3 = Theme.Main; KeyMain.Visible = KeyEnabled; KeyMain.ZIndex = 10
     Instance.new("UICorner", KeyMain).CornerRadius = UDim.new(0, 12)
     Instance.new("UIStroke", KeyMain).Color = Theme.Accent
     local KT = Instance.new("TextLabel", KeyMain); KT.Size = UDim2.new(1,0,0,50); KT.Text = "AUTHENTICATION"; KT.TextColor3 = Theme.Accent; KT.Font = "GothamBlack"; KT.TextSize = 18; KT.BackgroundTransparency = 1
@@ -81,7 +81,7 @@ function Library:CreateWindow(Config)
     Instance.new("UICorner", Top).CornerRadius = UDim.new(0, 15)
     local TTitle = Instance.new("TextLabel", Top); TTitle.Size = UDim2.new(1,-40,1,0); TTitle.Position = UDim2.new(0,25,0,0); TTitle.Text = Config.Name; TTitle.TextColor3 = Theme.Accent; TTitle.Font = "GothamBlack"; TTitle.TextSize = 18; TTitle.TextXAlignment = "Left"; TTitle.BackgroundTransparency = 1
 
-    local TogF = Instance.new("Frame", Gui); TogF.Size = UDim2.new(0, 55, 0, 55); TogF.Position = UDim2.new(0.05, 0, 0.1, 0); TogF.BackgroundColor3 = Theme.Main; TogF.Visible = not KeyEnabled; Instance.new("UICorner", TogF).CornerRadius = UDim.new(1, 0); Instance.new("UIStroke", TogF).Color = Theme.Accent
+    local TogF = Instance.new("Frame", Gui); TogF.Size = UDim2.new(0, 55, 0, 55); TogF.Position = UDim2.new(0.05, 0, 0.1, 0); TogF.BackgroundColor3 = Theme.Main; TogF.Visible = not KeyEnabled; Instance.new("UICorner", TogF).CornerRadius = UDim.new(1, 0); Instance.new("UIStroke", TogF).Color = Theme.Accent; TogF.ZIndex = 5
     local TBtn = Instance.new("TextButton", TogF); TBtn.Size = UDim2.new(1,0,1,0); TBtn.BackgroundTransparency = 1; TBtn.Text = "T"; TBtn.TextColor3 = Theme.Accent; TBtn.Font = "GothamBlack"; TBtn.TextSize = 24; MakeDraggable(TBtn, TogF)
 
     if not KeyEnabled then Tween(Main, {Size = UI_Size}) end
@@ -97,9 +97,10 @@ function Library:CreateWindow(Config)
 
     TBtn.MouseButton1Click:Connect(function() local isOpen = Main.Size ~= UDim2.new(0,0,0,0); Tween(Main, {Size = isOpen and UDim2.new(0,0,0,0) or UI_Size}) end)
 
-    local Side = Instance.new("ScrollingFrame", Main); Side.Size = UDim2.new(0, isMobile and 140 or 170, 1, -70); Side.Position = UDim2.new(0, 15, 0, 60); Side.BackgroundTransparency = 1; Side.ScrollBarThickness = 0
+    local Side = Instance.new("ScrollingFrame", Main); Side.Name = "SideBar"; Side.Size = UDim2.new(0, isMobile and 125 or 150, 1, -70); Side.Position = UDim2.new(0, 15, 0, 60); Side.BackgroundTransparency = 1; Side.ScrollBarThickness = 0; Side.AutomaticCanvasSize = "Y"
     Instance.new("UIListLayout", Side).Padding = UDim.new(0, 8)
-    local Container = Instance.new("Frame", Main); Container.Size = UDim2.new(1, isMobile and -175 or -210, 1, -75); Container.Position = UDim2.new(0, isMobile and 165 or 200, 0, 65); Container.BackgroundTransparency = 1
+    
+    local Container = Instance.new("Frame", Main); Container.Name = "Container"; Container.Position = UDim2.new(0, isMobile and 150 or 175, 0, 60); Container.Size = UDim2.new(1, isMobile and -165 or -190, 1, -75); Container.BackgroundTransparency = 1; Container.ClipsDescendants = true
 
     local Tabs = {First = true}
     function Tabs:CreateTab(name)
@@ -115,18 +116,18 @@ function Library:CreateWindow(Config)
 
         if Tabs.First then Tabs.First = false; Page.Visible = true; TabBtn.BackgroundColor3 = Theme.Accent; TabBtn.TextColor3 = Theme.Main; TabBtn.Size = UDim2.new(1, 0, 0, 40) end
 
-        local Elements = 0
+        local ElementCount = 0
         local E = {}
         
         function E:CreateSection(n) 
-            Elements = Elements + 1
-            local SFrame = Instance.new("Frame", Page); SFrame.Size = UDim2.new(1, -10, 0, 30); SFrame.BackgroundTransparency = 1; SFrame.LayoutOrder = Elements
+            ElementCount = ElementCount + 1
+            local SFrame = Instance.new("Frame", Page); SFrame.Size = UDim2.new(1, -5, 0, 30); SFrame.BackgroundTransparency = 1; SFrame.LayoutOrder = ElementCount
             local l = Instance.new("TextLabel", SFrame); l.Size = UDim2.new(1, 0, 1, 0); l.Text = "⚡ " .. n:upper(); l.TextColor3 = Theme.Accent; l.Font = "GothamBlack"; l.TextSize = 12; l.BackgroundTransparency = 1; l.TextXAlignment = "Left"
         end
 
         function E:CreateButton(D) 
-            Elements = Elements + 1
-            local b = Instance.new("TextButton", Page); b.Size = UDim2.new(1,-10,0,45); b.BackgroundColor3 = Theme.Element; b.Text = D.Name; b.TextColor3 = Theme.Text; b.Font = "GothamBold"; b.TextSize = 14; b.LayoutOrder = Elements; Instance.new("UICorner", b).CornerRadius = UDim.new(0, 10)
+            ElementCount = ElementCount + 1
+            local b = Instance.new("TextButton", Page); b.Size = UDim2.new(1,-5,0,42); b.BackgroundColor3 = Theme.Element; b.Text = D.Name; b.TextColor3 = Theme.Text; b.Font = "GothamBold"; b.TextSize = 14; b.LayoutOrder = ElementCount; Instance.new("UICorner", b).CornerRadius = UDim.new(0, 10)
             local s = Instance.new("UIStroke", b); s.Color = Theme.Stroke; s.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             b.MouseEnter:Connect(function() Tween(b, {BackgroundColor3 = Theme.Secondary}); Tween(s, {Color = Theme.Accent}) end)
             b.MouseLeave:Connect(function() Tween(b, {BackgroundColor3 = Theme.Element}); Tween(s, {Color = Theme.Stroke}) end)
@@ -134,8 +135,8 @@ function Library:CreateWindow(Config)
         end
 
         function E:CreateToggle(D) 
-            Elements = Elements + 1
-            local s = D.CurrentValue; local t = Instance.new("TextButton", Page); t.Size = UDim2.new(1,-10,0,45); t.BackgroundColor3 = Theme.Element; t.Text = "    "..D.Name; t.TextColor3 = Theme.Text; t.Font = "GothamBold"; t.TextXAlignment = "Left"; t.LayoutOrder = Elements; Instance.new("UICorner", t).CornerRadius = UDim.new(0, 10)
+            ElementCount = ElementCount + 1
+            local s = D.CurrentValue; local t = Instance.new("TextButton", Page); t.Size = UDim2.new(1,-5,0,42); t.BackgroundColor3 = Theme.Element; t.Text = "    "..D.Name; t.TextColor3 = Theme.Text; t.Font = "GothamBold"; t.TextXAlignment = "Left"; t.LayoutOrder = ElementCount; Instance.new("UICorner", t).CornerRadius = UDim.new(0, 10)
             local bg = Instance.new("Frame", t); bg.Size = UDim2.new(0,38,0,20); bg.Position = UDim2.new(1,-48,0.5,-10); bg.BackgroundColor3 = s and Theme.Accent or Theme.Secondary; Instance.new("UICorner", bg).CornerRadius = UDim.new(1,0)
             local dot = Instance.new("Frame", bg); dot.Size = UDim2.new(0,14,0,14); dot.Position = s and UDim2.new(1,-17,0.5,-7) or UDim2.new(0,3,0.5,-7); dot.BackgroundColor3 = s and Theme.Main or Theme.TextSemi; Instance.new("UICorner", dot).CornerRadius = UDim.new(1,0)
             t.MouseButton1Click:Connect(function() 
@@ -146,8 +147,8 @@ function Library:CreateWindow(Config)
         end
 
         function E:CreateSlider(D)
-            Elements = Elements + 1
-            local S = Instance.new("Frame", Page); S.Size = UDim2.new(1,-10,0,60); S.BackgroundColor3 = Theme.Element; S.LayoutOrder = Elements; Instance.new("UICorner", S).CornerRadius = UDim.new(0, 10)
+            ElementCount = ElementCount + 1
+            local S = Instance.new("Frame", Page); S.Size = UDim2.new(1,-5,0,58); S.BackgroundColor3 = Theme.Element; S.LayoutOrder = ElementCount; Instance.new("UICorner", S).CornerRadius = UDim.new(0, 10)
             local L = Instance.new("TextLabel", S); L.Size = UDim2.new(1,-20,0,30); L.Position = UDim2.new(0,15,0,5); L.Text = D.Name; L.TextColor3 = Theme.Text; L.Font="GothamBold"; L.TextSize = 13; L.TextXAlignment="Left"; L.BackgroundTransparency = 1
             local V = Instance.new("TextLabel", S); V.Size = UDim2.new(1,-20,0,30); V.Position = UDim2.new(0,-15,0,5); V.Text = tostring(D.CurrentValue); V.TextColor3 = Theme.Accent; V.Font="GothamBold"; V.TextXAlignment="Right"; V.BackgroundTransparency = 1
             local B = Instance.new("Frame", S); B.Size = UDim2.new(0.9,0,0,5); B.Position = UDim2.new(0.05,0,0.75,0); B.BackgroundColor3 = Theme.Secondary; Instance.new("UICorner", B)
