@@ -136,26 +136,4 @@ function Library:CreateWindow(Config)
     end
     return Tabs
 end
-
---- [ 🚀 ใช้งานง่ายแบบ RAYFIELD ] ---
-
-local Window = Library:CreateWindow({
-    Name = "TURK HUB V11 : ULTRA",
-    KeySystem = {
-        Key = "TURK-6699", -- เปลี่ยน Key ตรงนี้
-        Link = "https://getkey.com/turkhub" -- เปลี่ยน Link ตรงนี้
-    }
-})
-
-local Tab1 = Window:CreateTab("Main")
-Tab1:CreateToggle({
-    Name = "Auto Farm",
-    CurrentValue = false,
-    Callback = function(val) print(val) end
-})
-Tab1:CreateButton({
-    Name = "Fly Hack",
-    Callback = function() print("Flying") end
-})
-
 return Library
