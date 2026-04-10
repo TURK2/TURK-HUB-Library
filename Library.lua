@@ -2,7 +2,7 @@ local Library = {Flags = {}, Keybinds = {}}
 local TS, UIS, plr = game:GetService("TweenService"), game:GetService("UserInputService"), game:GetService("Players").LocalPlayer
 
 -- [ Cleanup ]
-for _, v in pairs(game:GetService("CoreGui"):GetChildren()) do if v.Name == "TURK-HUB" then v:Destroy() end end
+for _, v in pairs(game:GetService("CoreGui"):GetChildren()) do if v.Name == "TURK-HUB" or v.Name == "TURK_V17" then v:Destroy() end end
 
 local Theme = {
     Main = Color3.fromRGB(12, 12, 15), Top = Color3.fromRGB(18, 18, 22), Accent = Color3.fromRGB(0, 230, 255),
@@ -30,55 +30,48 @@ local function MakeDraggable(obj, target)
     UIS.InputEnded:Connect(function(input) if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then dragging = false end end)
 end
 
--- [[ 📢 NOTIFICATION SYSTEM ]] --
 function Library:Notify(Config)
     local NotifyGui = game:GetService("CoreGui"):FindFirstChild("TURK_V17")
     if not NotifyGui then return end
-    
     local NotifHolder = NotifyGui:FindFirstChild("NotifHolder") or Instance.new("Frame", NotifyGui)
     if NotifHolder.Name ~= "NotifHolder" then
         NotifHolder.Name = "NotifHolder"; NotifHolder.Size = UDim2.new(0, 300, 1, 0); NotifHolder.Position = UDim2.new(1, -310, 0, 0); NotifHolder.BackgroundTransparency = 1
         local L = Instance.new("UIListLayout", NotifHolder); L.VerticalAlignment = "Bottom"; L.Padding = UDim.new(0, 10)
     end
-
     local NF = Instance.new("Frame", NotifHolder); NF.Size = UDim2.new(1, 0, 0, 0); NF.BackgroundColor3 = Theme.Main; NF.ClipsDescendants = true; Instance.new("UICorner", NF)
     Instance.new("UIStroke", NF).Color = Theme.Accent
     local NT = Instance.new("TextLabel", NF); NT.Size = UDim2.new(1,-20,0,30); NT.Position = UDim2.new(0,10,0,5); NT.Text = Config.Title; NT.TextColor3 = Theme.Accent; NT.Font = "GothamBlack"; NT.TextSize = 14; NT.BackgroundTransparency = 1; NT.TextXAlignment = "Left"
     local NC = Instance.new("TextLabel", NF); NC.Size = UDim2.new(1,-20,0,40); NC.Position = UDim2.new(0,10,0,30); NC.Text = Config.Content; NC.TextColor3 = Theme.Text; NC.Font = "GothamBold"; NC.TextSize = 12; NC.BackgroundTransparency = 1; NC.TextXAlignment = "Left"; NC.TextWrapped = true
-
     Tween(NF, {Size = UDim2.new(1, 0, 0, 80)})
-    task.delay(Config.Duration or 3, function()
-        Tween(NF, {Size = UDim2.new(1, 0, 0, 0)})
-        task.wait(0.5); NF:Destroy()
-    end)
+    task.delay(Config.Duration or 3, function() Tween(NF, {Size = UDim2.new(1, 0, 0, 0)}); task.wait(0.5); NF:Destroy() end)
 end
 
 function Library:CreateWindow(Config)
     local Gui = Instance.new("ScreenGui", game:GetService("CoreGui")); Gui.Name = "TURK_V17"; Gui.IgnoreGuiInset = true
-    
-    -- [ Responsive Sizes ]
     local View = workspace.CurrentCamera.ViewportSize
     local isMobile = UIS.TouchEnabled
     local MainWidth = isMobile and math.min(View.X * 0.9, 480) or 620
     local MainHeight = isMobile and math.min(View.Y * 0.8, 350) or 420
     local UI_Size = UDim2.new(0, MainWidth, 0, MainHeight)
 
-    -- [[ 🔑 KEY SYSTEM ]] --
-    local KeyMain = Instance.new("Frame", Gui); KeyMain.Size = UDim2.new(0, 340, 0, 200); KeyMain.Position = UDim2.new(0.5, 0, 0.5, 0); KeyMain.AnchorPoint = Vector2.new(0.5, 0.5); KeyMain.BackgroundColor3 = Theme.Main
+    -- [[ 🔑 KEY SYSTEM LOGIC ]] --
+    local KeyEnabled = Config.KeySystem or false
+    local KeyMain = Instance.new("Frame", Gui); KeyMain.Size = UDim2.new(0, 340, 0, 200); KeyMain.Position = UDim2.new(0.5, 0, 0.5, 0); KeyMain.AnchorPoint = Vector2.new(0.5, 0.5); KeyMain.BackgroundColor3 = Theme.Main; KeyMain.Visible = KeyEnabled
     Instance.new("UICorner", KeyMain); Instance.new("UIStroke", KeyMain).Color = Theme.Accent
     local KT = Instance.new("TextLabel", KeyMain); KT.Size = UDim2.new(1,0,0,50); KT.Text = "AUTHENTICATION"; KT.TextColor3 = Theme.Accent; KT.Font = "GothamBlack"; KT.TextSize = 20; KT.BackgroundTransparency = 1
     local KI = Instance.new("TextBox", KeyMain); KI.Size = UDim2.new(0.85, 0, 0, 45); KI.Position = UDim2.new(0.075, 0, 0.35, 0); KI.BackgroundColor3 = Theme.Secondary; KI.PlaceholderText = "Enter Key..."; KI.Text = ""; KI.TextColor3 = Theme.Text; KI.Font = "GothamBold"; Instance.new("UICorner", KI)
     local KB = Instance.new("TextButton", KeyMain); KB.Size = UDim2.new(0.85, 0, 0, 40); KB.Position = UDim2.new(0.075, 0, 0.65, 0); KB.BackgroundColor3 = Theme.Accent; KB.Text = "PROCEED"; KB.TextColor3 = Theme.Main; KB.Font = "GothamBlack"; Instance.new("UICorner", KB)
 
     -- [[ MAIN UI ]] --
-    local Main = Instance.new("Frame", Gui); Main.Size = UDim2.new(0, 0, 0, 0); Main.Position = UDim2.new(0.5, 0, 0.5, 0); Main.AnchorPoint = Vector2.new(0.5, 0.5); Main.BackgroundColor3 = Theme.Main; Main.Visible = false; Main.ClipsDescendants = true
+    local Main = Instance.new("Frame", Gui); Main.Size = UDim2.new(0, 0, 0, 0); Main.Position = UDim2.new(0.5, 0, 0.5, 0); Main.AnchorPoint = Vector2.new(0.5, 0.5); Main.BackgroundColor3 = Theme.Main; Main.Visible = not KeyEnabled; Main.ClipsDescendants = true
     Instance.new("UICorner", Main).CornerRadius = UDim.new(0, 14); Instance.new("UIStroke", Main).Color = Theme.Stroke
-    
     local Top = Instance.new("Frame", Main); Top.Size = UDim2.new(1, 0, 0, 50); Top.BackgroundColor3 = Theme.Top; MakeDraggable(Top, Main)
     Instance.new("UICorner", Top); local T = Instance.new("TextLabel", Top); T.Size = UDim2.new(1,-40,1,0); T.Position = UDim2.new(0,25,0,0); T.Text = Config.Name; T.TextColor3 = Theme.Accent; T.Font = "GothamBlack"; T.TextSize = 18; T.TextXAlignment = "Left"; T.BackgroundTransparency = 1
 
-    local TogF = Instance.new("Frame", Gui); TogF.Size = UDim2.new(0, 55, 0, 55); TogF.Position = UDim2.new(0.05, 0, 0.1, 0); TogF.BackgroundColor3 = Theme.Main; TogF.Visible = false; Instance.new("UICorner", TogF).CornerRadius = UDim.new(1, 0); Instance.new("UIStroke", TogF).Color = Theme.Accent
+    local TogF = Instance.new("Frame", Gui); TogF.Size = UDim2.new(0, 55, 0, 55); TogF.Position = UDim2.new(0.05, 0, 0.1, 0); TogF.BackgroundColor3 = Theme.Main; TogF.Visible = not KeyEnabled; Instance.new("UICorner", TogF).CornerRadius = UDim.new(1, 0); Instance.new("UIStroke", TogF).Color = Theme.Accent
     local TBtn = Instance.new("TextButton", TogF); TBtn.Size = UDim2.new(1,0,1,0); TBtn.BackgroundTransparency = 1; TBtn.Text = "T"; TBtn.TextColor3 = Theme.Accent; TBtn.Font = "GothamBlack"; TBtn.TextSize = 24; MakeDraggable(TBtn, TogF)
+
+    if not KeyEnabled then Tween(Main, {Size = UI_Size}) end
 
     KB.MouseButton1Click:Connect(function()
         if KI.Text == Config.Key then
@@ -100,20 +93,15 @@ function Library:CreateWindow(Config)
     function Tabs:CreateTab(name)
         local TabBtn = Instance.new("TextButton", Side); TabBtn.Size = UDim2.new(1, -10, 0, 40); TabBtn.BackgroundColor3 = Theme.Secondary; TabBtn.Text = "  "..name; TabBtn.TextColor3 = Theme.TextSemi; TabBtn.Font = "GothamBold"; TabBtn.TextSize = 13; TabBtn.TextXAlignment = "Left"; Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 8)
         local Page = Instance.new("ScrollingFrame", Container); Page.Size = UDim2.new(1, 0, 1, 0); Page.Visible = false; Page.BackgroundTransparency = 1; Page.ScrollBarThickness = 0; Instance.new("UIListLayout", Page).Padding = UDim.new(0, 12); Page.AutomaticCanvasSize = "Y"
-
         TabBtn.MouseButton1Click:Connect(function()
             for _, v in pairs(Container:GetChildren()) do if v:IsA("ScrollingFrame") then v.Visible = false end end
             for _, v in pairs(Side:GetChildren()) do if v:IsA("TextButton") then Tween(v, {BackgroundColor3 = Theme.Secondary, TextColor3 = Theme.TextSemi}) end end
             Page.Visible = true; Tween(TabBtn, {BackgroundColor3 = Theme.Accent, TextColor3 = Theme.Main})
         end)
         if Tabs.First then Tabs.First = false; Page.Visible = true; TabBtn.BackgroundColor3 = Theme.Accent; TabBtn.TextColor3 = Theme.Main end
-
         local E = {}
         function E:CreateSection(n) local l = Instance.new("TextLabel", Page); l.Size = UDim2.new(1,-10,0,30); l.Text = "—— "..n:upper(); l.TextColor3 = Theme.Accent; l.Font = "GothamBlack"; l.TextSize = 12; l.BackgroundTransparency = 1; l.TextXAlignment = "Left" end
-        function E:CreateButton(D) 
-            local b = Instance.new("TextButton", Page); b.Size = UDim2.new(1,-10,0,45); b.BackgroundColor3 = Theme.Element; b.Text = D.Name; b.TextColor3 = Theme.Text; b.Font = "GothamBold"; Instance.new("UICorner", b); Instance.new("UIStroke", b).Color = Theme.Stroke
-            b.MouseButton1Click:Connect(D.Callback) 
-        end
+        function E:CreateButton(D) local b = Instance.new("TextButton", Page); b.Size = UDim2.new(1,-10,0,45); b.BackgroundColor3 = Theme.Element; b.Text = D.Name; b.TextColor3 = Theme.Text; b.Font = "GothamBold"; Instance.new("UICorner", b); Instance.new("UIStroke", b).Color = Theme.Stroke; b.MouseButton1Click:Connect(D.Callback) end
         function E:CreateToggle(D) 
             local s = D.CurrentValue; local t = Instance.new("TextButton", Page); t.Size = UDim2.new(1,-10,0,50); t.BackgroundColor3 = Theme.Element; t.Text = "    "..D.Name; t.TextColor3 = Theme.Text; t.Font = "GothamBold"; t.TextXAlignment = "Left"; Instance.new("UICorner", t)
             local bg = Instance.new("Frame", t); bg.Size = UDim2.new(0,40,0,22); bg.Position = UDim2.new(1,-50,0.5,-11); bg.BackgroundColor3 = s and Theme.Accent or Theme.Secondary; Instance.new("UICorner", bg).CornerRadius = UDim.new(1,0)
